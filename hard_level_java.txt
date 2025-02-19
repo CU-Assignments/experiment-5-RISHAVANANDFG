@@ -1,0 +1,88 @@
+import java.io.*;
+import java.util.*;
+
+// Hard Level: Employee Management System
+class Employee implements Serializable {
+    private static final long serialVersionUID = 1L;
+    int id;
+    String name, designation;
+    double salary;
+
+    public Employee(int id, String name, String designation, double salary) {
+        this.id = id;
+        this.name = name;
+        this.designation = designation;
+        this.salary = salary;
+    }
+
+    public void display() {
+        System.out.println("ID: " + id + ", Name: " + name + ", Designation: " + designation + ", Salary: " + salary);
+    }
+}
+
+class HardLevel {
+    private static final String FILE_NAME = "employees.ser";
+
+    public static void addEmployee() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Employee ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter Designation: ");
+        String designation = scanner.nextLine();
+        System.out.print("Enter Salary: ");
+        double salary = scanner.nextDouble();
+        
+        Employee emp = new Employee(id, name, designation, salary);
+        List<Employee> employees = loadEmployees();
+        employees.add(emp);
+        saveEmployees(employees);
+        System.out.println("Employee added successfully.");
+    }
+
+    public static void displayEmployees() {
+        List<Employee> employees = loadEmployees();
+        if (employees.isEmpty()) {
+            System.out.println("No employees found.");
+        } else {
+            for (Employee emp : employees) {
+                emp.display();
+            }
+        }
+    }
+
+    private static void saveEmployees(List<Employee> employees) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+            out.writeObject(employees);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static List<Employee> loadEmployees() {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) return new ArrayList<>();
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+            return (List<Employee>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("1. Add Employee\n2. Display All\n3. Exit");
+            System.out.print("Enter choice: ");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1: addEmployee(); break;
+                case 2: displayEmployees(); break;
+                case 3: System.out.println("Exiting..."); return;
+                default: System.out.println("Invalid choice, try again.");
+            }
+        }
+    }
+}
