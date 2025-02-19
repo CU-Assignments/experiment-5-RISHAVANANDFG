@@ -1,0 +1,17 @@
+import java.util.*;
+
+// Easy Level: Sum of Integers using Autoboxing and Unboxing
+class EasyLevel {
+    public static int sumList(List<Integer> numbers) {
+        int sum = 0;
+        for (Integer num : numbers) { // Auto-unboxing
+            sum += num;
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(Integer.parseInt("10"), Integer.parseInt("20"), Integer.parseInt("30"));
+        System.out.println("Sum: " + sumList(numbers));
+    }
+}
